@@ -3,7 +3,7 @@ from database.meteo_dao import MeteoDao
 
 class Model:
     def __init__(self):
-        pass
+        self.costoMinimo = 100000000000
 
 
     def getUmiditaMedia(self, month):
@@ -19,16 +19,22 @@ class Model:
         else:
             for s in situazioni:
                 costo = 0
-                cambioPossibile = self.verificaTreGiorni(precedenti)
-                if cambioPossibile:
-                    pass
+                ss = {s: situazioni.get(s)}
+                if self.verificaTreGiorni(precedenti):
+                    for i in range(len(ss.get(s))):
+                        precedenti.append(ss.get(s)[i])
+                        costo += ss.get(s)[i].umidita
+                        self.trovaSequenza(situazioni.pop(s), precedenti)
                 else:
                     prec = precedenti[-1]
-                    for i in range(0, 3):
-                        if s[i].localita == prec.localita:
-                            precedenti.append(s[i])
-                            costo += s[i].umidita
-                    self.trovaSequenza(situazioni, precedenti)
+                    for i in range(len(ss.get(s))):
+                        if situazioni.get(ss)[i].localita == prec.localita:
+                            precedenti.append(ss.get(s)[i])
+                            costo += ss.get(s)[i].umidita
+                    # if costo < self.costoMinimo:
+                    #     self.costoMinimo = costo
+                    #     self.percorsoCorretto
+                    self.trovaSequenza(situazioni.pop(s), precedenti)
                 return precedenti
 
 
