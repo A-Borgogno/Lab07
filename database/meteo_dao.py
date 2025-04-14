@@ -7,6 +7,7 @@ class MeteoDao():
     @staticmethod
     def getSituazioniMese(month):
         cnx = DBConnect.get_connection()
+        result = []
         diz = {}
         if cnx is None:
             print("Connessione fallita")
@@ -18,14 +19,16 @@ class MeteoDao():
                 s = Situazione(row["Localita"],
                                          row["Data"],
                                          row["Umidita"])
+                result.append(s)
                 if row["Data"] not in diz.keys():
                     diz[row["Data"]] = [s]
                 else:
                     diz[row["Data"]].append(s)
-                print(diz)
+                # print(diz)
             cursor.close()
             cnx.close()
-        return diz
+        return result
+        # return diz
 
 
     @staticmethod

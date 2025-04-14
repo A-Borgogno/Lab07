@@ -3,7 +3,7 @@ from calendar import month
 import flet as ft
 
 from UI.view import View
-from model.model import Model
+from model.modello import Model
 
 
 class Controller:
@@ -35,10 +35,10 @@ class Controller:
             self._view.create_alert("Selezionare un mese")
             return
         else:
-            res = self._model.getSequenza(self._mese)
-            self._view.update_page()
-            for r in res:
-                self._view.lst_result.controls.append(ft.Text(f"{r}"))
+            (seq, costo) = self._model.getSequenza(self._mese)
+            for s in seq:
+                self._view.lst_result.controls.append(ft.Text(f"{s}"))
+            self._view.lst_result.controls.append(ft.Text(f"Costo {costo}", weight=ft.FontWeight.BOLD))
             self._view.update_page()
 
     def read_mese(self, e):
